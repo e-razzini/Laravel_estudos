@@ -38,7 +38,7 @@ class ControladorCategoria extends Controller
         $cat = new Categoria();
         $cat->nome =$request->input('nomecategoria');
         $cat->save();
-        return redirect('categorias');
+        return redirect('/categorias');
     }
 
     /**
@@ -83,6 +83,6 @@ class ControladorCategoria extends Controller
      */
     public function destroy($id)
     {
-        //
+        
     }
 }
