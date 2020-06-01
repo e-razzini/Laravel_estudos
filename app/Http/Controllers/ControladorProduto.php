@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Produto;
 class ControladorProduto extends Controller
 {
     /**
@@ -13,7 +13,8 @@ class ControladorProduto extends Controller
      */
     public function index()
     {
-        return view('produtos');
+        $prods = Produto::all();
+        return view('produtos',compact('prods'));
     }
 
     /**
@@ -23,7 +24,7 @@ class ControladorProduto extends Controller
      */
     public function create()
     {
-        //
+        return view('novoproduto');
     }
 
     /**
@@ -34,7 +35,14 @@ class ControladorProduto extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $prods = new Produto();
+        $prods->name =$request->input('nomeproduto');
+        $prods->estoque =$request->input('estoque');
+        $prods->preco =$request->input('preco');
+        $prods->descricao =$request->input('descricao');
+        $prods->categoria_id =$request->input('categoria_id');
+        $prods->save();
+        return redirect('/produtos');
     }
 
     /**
@@ -56,7 +64,12 @@ class ControladorProduto extends Controller
      */
     public function edit($id)
     {
-        //
+        $prods = Produto::find($id);
+       if (isset($prods)) {
+       return view('/editarproduto', compact('prods'));
+        }
+        return redirect('/produtos');
+
     }
 
     /**
@@ -68,8 +81,17 @@ class ControladorProduto extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-    }
+        $prods = Produto::find($id);
+       if (isset($prods)) {
+        $prods->name=$request->input('nomeproduto');
+        $prods->estoque = $request->input('estoque');
+        $prods->preco = $request->input('preco');
+        $prods->descricao = $request->input('descricao');
+        $prods->categoria_id = $request->input('categoria');
+        $prods->save();
+       }
+       return redirect('/produtos');
+       }
 
     /**
      * Remove the specified resource from storage.
@@ -79,6 +101,11 @@ class ControladorProduto extends Controller
      */
     public function destroy($id)
     {
-        //
+     $prods = Produto::find($id);
+        if(isset($prods)){
+            $prods->delete();
+        }
+        return redirect('/produtos');
     }
-}
+    }
+
